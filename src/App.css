@@ -1,0 +1,61 @@
+.clock--container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 80vw;
+  background-color: #161618;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-height: 650px;
+}
+
+.label--container{
+  display: flex;
+  justify-content: space-around;
+  width: 40vw;
+  font-size: 2rem;
+  margin-bottom: 3vh;
+}
+
+.buttons--container {
+  display: flex;
+  justify-content: space-around;
+  width: 45vw;
+  font-size: 1.5rem;
+  margin-top: .5vh;
+}
+
+.break--container,
+.session--container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer--container {
+  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+  border-radius: 5px;
+  align-items: center;
+  width: 33%;
+  height: 23%;
+  background-color: #818181;
+  font-size: 1.2rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .label--container {
+    font-size: 1rem;
+  }
+
+  .buttons--container {
+    font-size: 1rem;
+  }
+}
+
+
