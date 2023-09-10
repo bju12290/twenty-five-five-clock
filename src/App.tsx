@@ -12,39 +12,61 @@ function App() {
   const [breakLength, setBreakLength] = React.useState(5)
   const [sessionLength, setSessionLength] = React.useState(25)
   const [timeRemaining, setTimeRemaining] = React.useState(25 * 60)
-  const [intervalId, setIntervalId] = React.useState(null)
+  const [intervalId, setIntervalId] = React.useState<number | undefined>(undefined)
+  const [isSession, setIsSession] = React.useState(true)
+  const audioElement = document.getElementById("beep") as HTMLAudioElement;
 
   React.useEffect(() =>{
     setTimeRemaining(sessionLength * 60)
   }, [sessionLength])
+
+  React.useEffect(() => {
+    let id: any
+  
+    if (running) {
+      id = setInterval(() => {
+        setTimeRemaining(prevTime => {
+          if (prevTime === 0) {
+  
+            if (isSession) {
+              setIsSession(false)
+              audioElement.play()
+              return breakLength * 60
+            } else {
+              setIsSession(true)
+              //setRunning(false) - Uncomment to pause timer after each break.
+              return sessionLength * 60
+            }
+          } else {
+            return prevTime - 1
+          }
+        })
+      }, 10)
+  
+      setIntervalId(id)
+    } else {
+      clearInterval(intervalId)
+    }
+  
+    return () => clearInterval(id)
+  }, [isSession, running])
+
   const handleReset = () => {
     setBreakLength(5)
     setSessionLength(25)
     clearInterval(intervalId)
     setRunning(false)
-    setTimeRemaining(25 * 60)
+    setTimeRemaining(sessionLength * 60)
+    setIsSession(true)
+    audioElement.pause()
   }
 
   const handleStart = () => {
     if (!running) {
-      setRunning(true);
-
-      
-      const id = setInterval(() => {
-        setTimeRemaining(prevTime => {
-          if (prevTime === 0) {
-            clearInterval(id)
-            return 0;
-          } else {
-            return prevTime - 1
-          }
-        })
-      }, 1000)
-
-      setIntervalId(id)
-    } else {
+      setRunning(true)
+    }
+    if (running) {
       setRunning(false)
-      clearInterval(intervalId)
     }
   }
 
@@ -87,10 +109,11 @@ function App() {
           </div>
         </div>
         <div className="timer--container">
-          <div id="timer-label">Session</div>
+          <div id="timer-label">{isSession ? "Session" : "Break"}</div>
           <div>{timeLeft}</div>
           {playPauseIcon}
           <FontAwesomeIcon id="reset" onClick={handleReset} icon={faRotateLeft} />
+          <audio id="beep" preload="auto" src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"></audio>
         </div>
     </>
   )
