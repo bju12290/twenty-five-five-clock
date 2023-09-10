@@ -41,7 +41,7 @@ function App() {
             return prevTime - 1
           }
         })
-      }, 10)
+      }, 1000)
   
       setIntervalId(id)
     } else {
